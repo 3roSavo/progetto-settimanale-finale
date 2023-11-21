@@ -1,9 +1,28 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomeCards = ({ tracks }) => {
   const dispatch = useDispatch();
-  const [musics, setMusics] = useState([]);
+  const [musics, setMusics] = useState(null);
+  const selector = useSelector((state) => state.favouriteSongs);
+
+  const handleHeartClick = (clickedTrack) => {
+    const isTrackInFavorites = selector.some(
+      (singleTrack) => singleTrack.id === clickedTrack.id
+    );
+    if (isTrackInFavorites) {
+      dispatch({
+        type: "REMOVE_FAVOURITE_SONGS",
+        payload: clickedTrack.id,
+      });
+    } else {
+      dispatch({
+        type: "ADD_FAVOURITE_SONGS",
+        payload: clickedTrack,
+      });
+    }
+    console.log(isTrackInFavorites);
+  };
 
   const getTracks = () => {
     fetch(
@@ -25,9 +44,10 @@ const HomeCards = ({ tracks }) => {
         }
       })
       .then((data) => {
-        console.log(data.data);
-        setMusics(data.data);
+        setMusics(data.data.slice(0, 4));
+        console.log(data.data.slice(0, 4));
       })
+
       .catch((err) => {
         return err;
       });
@@ -36,49 +56,52 @@ const HomeCards = ({ tracks }) => {
     getTracks();
   }, []);
 
-  return musics.slice(0, 4).map((track) => {
-    return (
-      musics && (
-        <div className="col text-center" key={track.id}>
-          <img
-            className="img-fluid click-hover"
-            src={track.album.cover_medium}
-            alt="artist"
-            onClick={() => {
-              dispatch({
-                type: "SELECTED_SONG",
-                payload: track,
-              });
-            }}
-          />
-          <p className="row">
-            <div
-              className="col-9 p-0 m-0"
-              onClick={() => {
-                dispatch({
-                  type: "SELECTED_SONG",
-                  payload: track,
-                });
-              }}
-            >
-              Track: {track.title.slice(0, 16)}... <br></br>Artist:{" "}
-              <span>{track.artist.name}</span>
-            </div>
-            <div className="col-1 p-0 row align-items-center">
-              <i
-                className="bi bi-suit-heart click-hover"
+  return (
+    <>
+      {musics &&
+        musics.map((track) => {
+          const isTrackInFavorites = selector.some(
+            (singleTrack) => singleTrack.id === track.id
+          );
+          return (
+            <div className="col text-center" key={track.id}>
+              <img
+                className="img-fluid click-hover"
+                src={track.album.cover_medium}
+                alt="artist"
                 onClick={() => {
                   dispatch({
-                    type: "FAVOURITE_SONGS",
+                    type: "SELECTED_SONG",
                     payload: track,
                   });
                 }}
-              ></i>
+              />
+              <div className="row">
+                <div
+                  className="col-9 p-0 m-0"
+                  onClick={() => {
+                    dispatch({
+                      type: "SELECTED_SONG",
+                      payload: track,
+                    });
+                  }}
+                >
+                  Track: {track.title.slice(0, 16)}... <br></br>Artist:{" "}
+                  <span>{track.artist.name}</span>
+                </div>
+                <div className="col-1 p-0 row align-items-center">
+                  <i
+                    onClick={() => handleHeartClick(track)}
+                    className={`click-hover bi bi-suit-heart${
+                      isTrackInFavorites ? "-fill" : ""
+                    }`}
+                  ></i>
+                </div>
+              </div>
             </div>
-          </p>
-        </div>
-      )
-    );
-  });
+          );
+        })}
+    </>
+  );
 };
 export default HomeCards;

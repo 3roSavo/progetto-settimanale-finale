@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import logo from "../assets/logo/logo.png";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const MyNavbar = () => {
   const [querySearch, setQuerySearch] = useState("");
@@ -71,12 +72,12 @@ const MyNavbar = () => {
             <div className="navbar-nav">
               <ul>
                 <li>
-                  <a
+                  <Link
+                    to={"/"}
                     className="nav-item nav-link d-flex align-items-center"
-                    href="#"
                   >
                     <i className="bi bi-house-door-fill"></i>&nbsp; Home
-                  </a>
+                  </Link>
                 </li>
                 <li>
                   <a
@@ -85,6 +86,14 @@ const MyNavbar = () => {
                   >
                     <i className="bi bi-book-fill"></i>&nbsp; Your Library
                   </a>
+                </li>
+                <li>
+                  <Link
+                    to={"/favourites"}
+                    className="nav-item nav-link d-flex align-items-center"
+                  >
+                    <i className="bi bi-suit-heart-fill"></i>&nbsp; Favourites
+                  </Link>
                 </li>
                 <li>
                   <form

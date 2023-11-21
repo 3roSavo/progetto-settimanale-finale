@@ -3,29 +3,35 @@ import "./App.css";
 import MyNavbar from "./components/MyNavbar";
 import MainSection from "./components/MainSection";
 import FooterPlayer from "./components/FooterPlayer";
+import Favourites from "./components/Favourites";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <div className="container-fluid">
-        <div className="row">
-          {/* SIDEBAR VERTICAL */}
+      <BrowserRouter>
+        <div className="container-fluid">
+          <div className="row">
+            {/* SIDEBAR VERTICAL */}
 
-          <MyNavbar />
+            <MyNavbar />
 
-          {/* END SIDEBAR VERTICAL */}
-          {/* MAIN SECTION */}
+            {/* END SIDEBAR VERTICAL */}
 
-          <MainSection />
-
-          {/* END MAIN SECTION */}
+            {/* MAIN SECTION */}
+            <Routes>
+              <Route path="/" element={<MainSection />} />
+              <Route path="/favourites" element={<Favourites />} />
+            </Routes>
+            {/* END MAIN SECTION */}
+          </div>
         </div>
-      </div>
-      {/* NAVBAR FLEX-BOTTOM */}
+        {/* NAVBAR FLEX-BOTTOM */}
 
-      <FooterPlayer />
+        <FooterPlayer />
 
-      {/* END NAVBAR BOTTOM */}
+        {/* END NAVBAR BOTTOM */}
+      </BrowserRouter>
     </>
   );
 }

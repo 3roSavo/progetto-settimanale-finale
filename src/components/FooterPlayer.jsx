@@ -1,15 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import nextButton from "../assets/playerbuttons/next.png";
 import playButton from "../assets/playerbuttons/play.png";
 import prevButton from "../assets/playerbuttons/prev.png";
 import repeatButton from "../assets/playerbuttons/repeat.png";
 import shuffleButton from "../assets/playerbuttons/shuffle.png";
+import pausa1 from "../assets/playerbuttons/pausa1.png";
 import { useSelector } from "react-redux";
 
 const FooterPlayer = () => {
   const selector = useSelector((state) => state.selectedSong);
   useEffect(() => {}, [selector]);
+  const [playOrPause, setPlayOrPause] = useState(false);
 
   return (
     <div className="fixed-bottom bg-container pt-1">
@@ -24,8 +26,17 @@ const FooterPlayer = () => {
                 <a href="#">
                   <img src={prevButton} alt="prev" />
                 </a>
-                <a href="#">
-                  <img src={playButton} alt="play" />
+                <a
+                  href="#"
+                  onClick={() => {
+                    setPlayOrPause(!playOrPause);
+                  }}
+                >
+                  <img
+                    src={playOrPause === false ? playButton : pausa1}
+                    height={"14px"}
+                    alt="play"
+                  />
                 </a>
                 <a href="#">
                   <img src={nextButton} alt="next" />

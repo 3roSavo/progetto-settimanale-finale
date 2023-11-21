@@ -3,7 +3,7 @@ const initialState = {
   displaySearch: "none",
   listTrucks: null,
   selectedSong: null,
-  favouriteSongs: null,
+  favouriteSongs: [],
 };
 
 const mainReducer = (state = initialState, action) => {
@@ -29,10 +29,17 @@ const mainReducer = (state = initialState, action) => {
         ...state,
         selectedSong: action.payload,
       };
-    case "FAVOURITE_SONGS":
+    case "ADD_FAVOURITE_SONGS":
       return {
         ...state,
-        favouriteSongs: action.payload,
+        favouriteSongs: [...state.favouriteSongs, action.payload],
+      };
+    case "REMOVE_FAVOURITE_SONGS":
+      return {
+        ...state,
+        favouriteSongs: state.favouriteSongs.filter(
+          (track) => track.id !== action.payload
+        ),
       };
 
     default:
